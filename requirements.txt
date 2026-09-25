@@ -1,0 +1,12 @@
+accelerate>=1.14.0
+numpy>=1.26
+matplotlib>=3.8
+scikit-learn>=1.5
+peft>=0.19.1
+PyYAML>=6.0
+pytest>=9.0
+tensorboard>=2.20.0
+torch>=2.8.0
+transformers>=5.15.0
+tqdm>=4.67.1
+bert-score>=0.3.13

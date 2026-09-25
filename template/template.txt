@@ -1,0 +1,3 @@
+Question: {question} Let's think step by step:###{response}
+--- response_template ---
+{cot}###Answer:{answer}

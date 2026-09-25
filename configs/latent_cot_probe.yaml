@@ -1,0 +1,54 @@
+output_dir: outputs/analysis/latent_cot_probe
+seed: 42
+latent_cache_dir:
+
+checkpoint:
+  resume_from_checkpoint:
+  eval_checkpoint:
+
+data:
+  train_path: data/gsm8k/aug_train.jsonl
+  eval_path: data/gsm8k/test.jsonl
+  validation_ratio: 0.01
+  max_train_samples:
+  max_eval_samples:
+
+probe_template: |
+  Convert the following latent reasoning into explicit text:
+  ###{latents}###
+  Converted text:
+
+collection:
+  batch_size: 128
+
+decoder_lora:
+  r: 128
+  lora_alpha: 32
+  lora_dropout: 0.1
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+training:
+  num_train_epochs: 25
+  per_device_train_batch_size: 32
+  per_device_eval_batch_size: 64
+  gradient_accumulation_steps: 1
+  learning_rate: 2.0e-4
+  weight_decay: 0.01
+  lr_scheduler_type: cosine
+  warmup_steps: 0.03
+  bf16: true
+  logging_steps: 10
+  save_total_limit: 3
+  report_to: tensorboard
+
+evaluation:
+  max_new_tokens: 256
+  bertscore_model: bert-base-uncased
+  bertscore_batch_size: 64

@@ -1,0 +1,52 @@
+method: cot
+base_model: meta-llama/Llama-3.2-1B-Instruct
+template_path: template/template.txt
+output_dir: outputs/cot_reference
+
+data:
+  train_path: data/gsm8k/aug_train.jsonl
+  eval_path: data/gsm8k/test.jsonl
+  validation_ratio: 0.01
+  max_train_samples:
+  max_eval_samples:
+  max_source_length: 256
+  max_target_length: 256
+
+lora:
+  r: 128
+  alpha: 32
+  dropout: 0.1
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+checkpoint:
+  resume_from_checkpoint:
+  eval_checkpoint:
+
+training:
+  seed: 42
+  model_max_length: 512
+  num_train_epochs: 40
+  per_device_train_batch_size: 32
+  per_device_eval_batch_size: 64
+  gradient_accumulation_steps: 1
+  learning_rate: 2.0e-4
+  max_grad_norm: 2.0
+  weight_decay: 0.1
+  lr_scheduler_type: cosine
+  warmup_steps: 0.03
+  bf16: true
+  logging_steps: 10
+  eval_strategy: epoch
+  save_strategy: epoch
+  save_total_limit: 3
+  report_to: tensorboard
+
+evaluation:
+  max_new_tokens: 256
